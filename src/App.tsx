@@ -1,7 +1,7 @@
 import { Github, Linkedin, Mail, Menu, X, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare } from "lucide-react"
 import { useEffect, useState } from "react"
 import { icons, projects, sections } from "./constants"
-import profile from './assets/perfil.jpeg'
+import profile from './assets/perfil.png'
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState("hero")
@@ -198,7 +198,7 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto text-center animate-on-scroll transition-all duration-1000 ease-out">
             <div className="flex items-center justify-center gap-10 py-5">
               <img src={profile}
-                className="w-20 h-20 rounded-full"
+                className="w-25 h-30 rounded-full"
                 alt="Foto de perfil de Matias Campodonico, Full Stack Developer"
                 loading="eager"
               />
