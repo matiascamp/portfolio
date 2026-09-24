@@ -17,6 +17,7 @@ import snippets from "../assets/snippets.png"
 export const sections = [
     { id: "hero", label: "Inicio" },
     { id: "experience", label: "Experiencia" },
+    { id: "education", label: "Formación" },
     { id: "projects", label: "Proyectos" },
     { id: "stack", label: "Stack" },
     { id: "contact", label: "Contacto" },

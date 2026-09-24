@@ -1,11 +1,10 @@
-import { Github, Linkedin, Mail, Menu, X, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare } from "lucide-react"
+import { Github, Linkedin, Mail, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare } from "lucide-react"
 import { useEffect, useState } from "react"
 import { icons, projects, sections } from "./constants"
 import profile from './assets/perfil.png'
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState("hero")
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     document.title = "Matias Campodonico - Full Stack Developer | React, Node.js, VTEX"
@@ -54,54 +53,6 @@ const Portfolio = () => {
   }, [])
 
   useEffect(() => {
-
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const windowHeight = window.innerHeight
-      const isMobile = window.innerWidth < 768
-
-      let active = "hero"
-      let bestMatch = { section: "hero", visibility: 0 }
-
-      const sectionIds = sections.map(section => section.id)
-
-      for (const sectionId of sectionIds) {
-        const element = document.getElementById(sectionId)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-
-          const visibleTop = Math.max(0, -rect.top)
-          const visibleBottom = Math.min(rect.height, windowHeight - rect.top)
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop)
-          const visibilityRatio = rect.height > 0 ? visibleHeight / rect.height : 0
-
-          const threshold = isMobile ? 0.15 : 0.2
-
-          if (visibilityRatio >= threshold) {
-            if (visibilityRatio > bestMatch.visibility) {
-              bestMatch = { section: sectionId, visibility: visibilityRatio }
-            }
-          }
-
-          const viewportCenter = windowHeight / 2
-          if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
-            active = sectionId
-          }
-        }
-      }
-
-      if (bestMatch.visibility > 0.3) {
-        active = bestMatch.section
-      }
-
-      // Override para el final del documento
-      if (scrollY + windowHeight >= document.documentElement.scrollHeight - 100) {
-        active = "contact"
-      }
-
-      setActiveSection(active)
-    }
-
     const observerOptions = {
       threshold: [0.1, 0.2, 0.3],
       rootMargin: "0px 0px -100px 0px"
@@ -112,34 +63,28 @@ const Portfolio = () => {
         if (entry.isIntersecting) {
           const element = entry.target
           element.classList.add("animate-in")
-
-          const cards = element.querySelectorAll(".card-animate")
-          cards.forEach((card, index) => {
-            setTimeout(() => {
-              card.classList.add("animate-in")
-            }, index * 200)
-          })
-
-          const children = element.querySelectorAll(".stagger-child")
-          children.forEach((child, index) => {
-            setTimeout(() => {
-              child.classList.add("animate-in")
-            }, index * 150)
-          })
+          observer.unobserve(element)
         }
       })
     }, observerOptions)
 
-    const animatableElements = document.querySelectorAll(".animate-on-scroll")
-    animatableElements.forEach((el) => observer.observe(el))
+    document.querySelectorAll(".animate-on-scroll, .stagger-child").forEach((element) => observer.observe(element))
 
-    window.addEventListener("scroll", handleScroll)
+    const sectionObserver = new IntersectionObserver((entries) => {
+      const visibleSections = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+      if (visibleSections[0]) setActiveSection(visibleSections[0].target.id)
+    }, { threshold: [0.2, 0.4, 0.6], rootMargin: "-20% 0px -20% 0px" })
 
-    handleScroll()
+    sections.forEach(({ id }) => {
+      const section = document.getElementById(id)
+      if (section) sectionObserver.observe(section)
+    })
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
       observer.disconnect()
+      sectionObserver.disconnect()
     }
   }, [])
 
@@ -148,28 +93,21 @@ const Portfolio = () => {
     if (element) {
       element?.scrollIntoView({ behavior: "smooth" })
     }
-    setSidebarOpen(false)
   }
 
 
   return (
 
     <div className="min-h-screen bg-background dark">
-      <button onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-4 left-4 z-3 md:hidden bg-background/80 backdrop-blur-sm border rounded-lg p-2 "
-        aria-label={sidebarOpen ? "Cerrar menú" : "Abrir menú"}
-        aria-expanded={sidebarOpen}
-      >
-        {sidebarOpen ? <X className="w-6 h-6" color="white" /> : <Menu className="w-6 h-6" color="white" />}
-      </button>
-      <nav className={`fixed top-0 h-full w-60 z-2 bg-background/95 backdrop-blur-md transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-100"} md:translate-x-0`}
-        role="navigation"
+      <a href="#hero" className="skip-link">Saltar al contenido</a>
+      <nav className="fixed top-0 h-full w-60 z-2 bg-background/95 backdrop-blur-md"
         aria-label="Navegación principal"
+        id="main-navigation"
       >
         <div className="flex flex-col h-full p-6">
           <div className="flex-1">
             <ul className="relative h-full w-full flex flex-col justify-evenly items-center ">
-              <div className="absolute left-0 border-l-1 border-green-600 h-full" />
+              <li aria-hidden="true" className="absolute left-0 border-l-1 border-green-600 h-full list-none" />
               {
                 sections.map((section) => (
                   <li key={section.id} className="flex items-center justify-center w-full">
@@ -186,26 +124,22 @@ const Portfolio = () => {
           </div>
         </div>
       </nav>
-      {
-        sidebarOpen && (
-          <div className="fixed inset-0 z-1 md:hidden"
-            aria-hidden="true"
-          />
-        )
-      }
       <div className="min-h-screen md:ml-64">
+        <main id="main-content">
         <section id="hero" className=" pt-20 md:pt-25 flex items-start justify-center px-4 sm:px-6 lg:px-8" aria-labelledby="hero-heading">
           <div className="max-w-4xl mx-auto text-center animate-on-scroll transition-all duration-1000 ease-out">
             <div className="flex items-center justify-center gap-10 py-5">
               <img src={profile}
                 className="w-25 h-30 rounded-full"
                 alt="Foto de perfil de Matias Campodonico, Full Stack Developer"
+                width="80"
+                height="80"
                 loading="eager"
               />
               <p className="neon-border rounded-2xl p-2 border text-white  transition-all duration-400 transform hover:scale-105 text-xl">Disponible para trabajar</p>
             </div>
             <header>
-              <h1 className="text-4xl sm:text-6xl font-bold text-foreground mb-6 stagger-child transition-all duration-800">
+              <h1 id="hero-heading" className="text-4xl sm:text-6xl font-bold text-foreground mb-6 stagger-child transition-all duration-800">
                 Matias Campodonico
                 <span className="text-primary block neon-text-large">
                   Full stack web developer
@@ -213,7 +147,7 @@ const Portfolio = () => {
               </h1>
             </header>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed stagger-child transition-all duration-800 ease-out">
-              Full Stack Developer con experiencia en el sector e-commerce,especializado en aplicaciones web dinamicas,optimizaciones de código y aumentos de performance.
+              Full Stack Developer especializado en soluciones e-commerce con React, Node.js y VTEX. Experiencia desarrollando tiendas para marcas como Carrefour y BGH, creando funcionalidades desde cero y optimizando la performance y la experiencia de compra.
             </p>
             <div className="py-10 flex items-center justify-center gap-5">
               <a
@@ -227,7 +161,7 @@ const Portfolio = () => {
                 href="https://linkedin.com/in/matias-campodonico"
                 rel="noopener noreferrer"
                 aria-label="Ver perfil de LinkedIn de Matias Campodonico (se abre en nueva pestaña)"
-              >Linkedln</a>
+              >LinkedIn</a>
             </div>
           </div>
         </section>
@@ -235,7 +169,7 @@ const Portfolio = () => {
           <div className="max-w-6xl mx-auto animate-on-scroll">
             <div className="flex items-center w-full  mb-12 gap-5 justify-center">
               <BriefcaseBusiness size={50} color="white" aria-hidden="true" />
-              <h2 className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Experiencia laboral</h2>
+              <h2 id="experience-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Experiencia laboral</h2>
             </div>
             <div className="relative">
               <div className="absolute left-8 md:left-1/2 transform md:-translate-x-px h-full w-0.5 bg-gradient-to-b from-emerald-500 via-emerald-400 to-emerald-500 neon-glow"></div>
@@ -245,49 +179,22 @@ const Portfolio = () => {
                   <div className="ml-16 md:ml-0 md:w-1/2 md:pr-8">
                     <div className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300">
                       <header className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-emerald-400">UI Developer</h3>
+                        <h3 className="text-xl font-semibold text-emerald-400">Full Stack Developer</h3>
                         <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">
                           2021 - 2024
                         </time>
                       </header>
                       <h4 className="text-lg font-semibold mb-3 text-white">Valtech</h4>
                       <ul className="text-gray-300 space-y-2 text-md">
-                        <li>• Desarrollo de interfaces responsivas usando React,CSS nativo y jQuery</li>
-                        <li>• Integraciones de funciones desde el back-end con Node.js en la plataforma VTEX IO</li>
-                        <li>• Re rediseños de webs pixel perfect segun requerimientos del cliente</li>
-                        <li>• Consumo y manejo de APIs mediante graphQl</li>
+                        <li>Desarrollé y mantuve soluciones e-commerce sobre VTEX para Más Online, BGH, BGH Tecno y Carrefour, participando en todo el ciclo de desarrollo.</li>
+                        <li>Desarrollé desde cero la tienda de celulares de BGH Tecno, trabajando en home, catálogo, PDP, carrito y checkout, además de la maquetación de integraciones y promociones de VTEX.</li>
+                        <li>Implementé nuevas funcionalidades para Carrefour, como calificaciones y reseñas de productos, rework de la landing y nuevas secciones de contenido.</li>
+                        <li>Construí soluciones backend con Node.js para guardar comentarios y reseñas, consultar promociones e insertar contenidos publicitarios.</li>
+                        <li>Integré VTEX Master Data mediante consultas GraphQL y trabajé en la optimización de la carga inicial para mejorar el rendimiento de las tiendas.</li>
+                        <li>En equipos de 4 a 5 desarrolladores, realicé análisis técnicos, estimaciones de tareas, desarrollo y code reviews durante cada sprint.</li>
                       </ul>
                       <div className="flex flex-wrap gap-2 mt-4">
-                        {["React", "Node.js", "VTEX IO", "Typescript", "graphql"].map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs border border-emerald-500/30"
-                            role="listitem"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-                <article className="relative flex items-center md:justify-end">
-                  <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-emerald-400 rounded-full neon-glow z-10"></div>
-                  <div className="ml-16 md:ml-0 md:w-1/2 md:pl-8">
-                    <div className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300">
-                      <header className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-emerald-400">Full Stack Developer</h3>
-                        <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">2021</time>
-                      </header>
-                      <h4 className="text-lg font-semibold mb-3 text-white">Academia Henry</h4>
-                      <ul className="text-gray-300 space-y-2 text-sm">
-                        <li>• Bootcamp intensivo con +800 horas para cubrir las bases del full stack development</li>
-                        <li>• Maestria en tecnologias web modernas y metodologias de desarrollo</li>
-                        <li>• Desarrollo de multiples proyectos usando React,Node.js y bases de datos</li>
-                        <li>• Aprendizaje de metodologias agiles y desarrollos colaborativos</li>
-                      </ul>
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        {["React", "Node.js", "PostgreSQL", "JavaScript", "Git"].map((tech) => (
+                        {["React", "Node.js", "VTEX IO", "TypeScript", "GraphQL", "jQuery", "CSS"].map((tech) => (
                           <span
                             key={tech}
                             className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs border border-emerald-500/30"
@@ -301,6 +208,43 @@ const Portfolio = () => {
                   </div>
                 </article>
               </div>
+            </div>
+          </div>
+        </section>
+        <section id="education" className="py-16 px-6" aria-labelledby="education-heading">
+          <div className="max-w-6xl mx-auto animate-on-scroll">
+            <div className="flex items-center w-full mb-12 gap-5 justify-center">
+              <Terminal size={50} color="white" aria-hidden="true" />
+              <h2 id="education-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Formación</h2>
+            </div>
+            <div className="max-w-3xl mx-auto">
+              <article className="relative flex items-center">
+                <div className="w-full">
+                  <div className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300">
+                    <header className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-semibold text-emerald-400">Bootcamp Full Stack Developer</h3>
+                      <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">2021</time>
+                    </header>
+                    <h4 className="text-lg font-semibold mb-3 text-white">Academia Henry</h4>
+                    <ul className="text-gray-300 space-y-2 text-md">
+                      <li>Formación intensiva de más de 800 horas en desarrollo full stack.</li>
+                      <li>Desarrollo de proyectos con React, Node.js, bases de datos y Git.</li>
+                      <li>Práctica de metodologías ágiles y dinámicas de desarrollo colaborativo.</li>
+                    </ul>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {["React", "Node.js", "PostgreSQL", "JavaScript", "Git"].map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-xs border border-emerald-500/30"
+                          role="listitem"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
           </div>
         </section>
@@ -326,6 +270,8 @@ const Portfolio = () => {
                           src={image}
                           alt={`Screenshot ${index + 1} del proyecto ${project.title}`}
                           className="h-full object-cover w-auto"
+                          width="320"
+                          height="192"
                           loading="lazy"
                         />
                       )) :
@@ -333,6 +279,8 @@ const Portfolio = () => {
                         src={project.image}
                         alt={`Screenshot del proyecto ${project.title}`}
                         className="w-full h-full object-cover opacity-80"
+                        width="480"
+                        height="192"
                         loading="lazy"
                       />
                     }
@@ -389,6 +337,8 @@ const Portfolio = () => {
                       src={tech.icon}
                       alt={`Logo de ${tech.name}`}
                       className="w-8 h-8 md:w-auto md:h-auto"
+                      width="40"
+                      height="40"
                       loading="lazy"
 
                     />
@@ -412,7 +362,6 @@ const Portfolio = () => {
                 target="_blank"
                 className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105"
                 aria-label="Enviar email a campodonicomatias@outlook.com"
-                role="listitem"
               >
                 <Mail className="w-8 h-8 text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold mb-2 text-white">Email</h3>
@@ -425,7 +374,6 @@ const Portfolio = () => {
                 rel="noopener noreferrer"
                 className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105"
                 aria-label="Ver perfil de LinkedIn (se abre en nueva pestaña)"
-                role="listitem"
               >
                 <Linkedin className="w-8 h-8 text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold mb-2 text-white">LinkedIn</h3>
@@ -438,7 +386,6 @@ const Portfolio = () => {
                 rel="noopener noreferrer"
                 className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105"
                 aria-label="Ver perfil de GitHub (se abre en nueva pestaña)"
-                role="listitem"
               >
                 <Github className="w-8 h-8 text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold mb-2 text-white">GitHub</h3>
@@ -447,6 +394,7 @@ const Portfolio = () => {
             </div>
           </div>
         </section>
+        </main>
       </div>
     </div>
 

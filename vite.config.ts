@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -21,7 +21,7 @@ export default defineConfig({
     minify: 'terser'
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'lucide-react','tailwindcss'],
+    include: ['react', 'react-dom/client', 'lucide-react'],
   },
   preview: {
     headers: {
@@ -29,5 +29,11 @@ export default defineConfig({
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',
     }
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    restoreMocks: true,
+    clearMocks: true,
   }
 })
