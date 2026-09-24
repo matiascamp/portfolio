@@ -16,6 +16,7 @@ import snippets from "../assets/snippets.png"
 
 export const sections = [
     { id: "hero", label: "Inicio" },
+    { id: "about", label: "Sobre mí" },
     { id: "experience", label: "Experiencia" },
     { id: "education", label: "Formación" },
     { id: "projects", label: "Proyectos" },
@@ -24,24 +25,33 @@ export const sections = [
   ]
 
   export const icons = [
-    { name: "React", icon: react },
-    { name: "Node.js", icon: node },
-    { name: "TypeScript", icon: typescript },
-    { name: "Next.js", icon: next },
-    { name: "VTEX IO", icon: global },
-    { name: "VTEX Master Data", icon: database },
-    { name: "GraphQL", icon: graphql },
-    { name: "jQuery", icon: global },
-    { name: "Tailwind", icon: tailwind },
-    { name: "Zustand / Redux", icon: global },
-    { name: "MongoDB / MySQL", icon: database },
+    { name: "React", icon: react, group: "Experiencia profesional" },
+    { name: "Node.js", icon: node, group: "Experiencia profesional" },
+    { name: "VTEX IO", icon: global, group: "Experiencia profesional" },
+    { name: "VTEX Master Data", icon: database, group: "Experiencia profesional" },
+    { name: "GraphQL", icon: graphql, group: "Experiencia profesional" },
+    { name: "jQuery", icon: global, group: "Experiencia profesional" },
+    { name: "TypeScript", icon: typescript, group: "Proyectos y formación" },
+    { name: "Next.js", icon: next, group: "Proyectos y formación" },
+    { name: "Tailwind", icon: tailwind, group: "Proyectos y formación" },
+    { name: "Zustand / Redux", icon: global, group: "Proyectos y formación" },
+    { name: "MongoDB / MySQL", icon: database, group: "Proyectos y formación" },
   ]
 
   export const projects = [
     {
       title: "Plataformas e-commerce",
       description:
-        "Participación en el desarrollo de tiendas para Carrefour, Tokin, BGH, BGH Tecno y Petba. Implementé nuevas funcionalidades de e-commerce, custom apps, integraciones con GraphQL, mejoras de checkout y refactors de diseño en VTEX IO. Proyecto profesional con repositorios privados.",
+        "Proyecto profesional de evolución continua para tiendas e-commerce de Carrefour, Tokin, BGH, BGH Tecno y Petba. Participé en el desarrollo de nuevas funcionalidades y reworks para distintas áreas de las tiendas, con foco principalmente frontend y repositorios privados.",
+      caseStudy: true,
+      featured: true,
+      details: [
+        "Desarrollo de la sección de comentarios y reviews, incluyendo la creación de tablas y entidades en VTEX Master Data y su gestión desde Mi Cuenta.",
+        "Implementación de autorización de terceros para realizar compras y desarrollo de custom apps para banners y contenido promocional.",
+        "Modificación y personalización de sliders, landings y otras secciones de las tiendas según los requerimientos de cada cliente.",
+        "Resolución de funcionalidades complejas mediante soluciones backend con Node.js cuando requerían múltiples conexiones o llamadas; aproximadamente el 80% de las implementaciones se resolvía en frontend.",
+        "Las funcionalidades se implementaban directamente en producción dentro de la página principal y otras áreas de cada tienda, respetando la arquitectura y las capacidades de VTEX."
+      ],
       image: [carrefour,bgh,tecno,tokin],
       tech: ["React", "Node.js", "VTEX IO", "GraphQL"],
       link: ""

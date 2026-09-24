@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare } from "lucide-react"
+import { Github, Linkedin, Mail, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare, UserRound } from "lucide-react"
 import { useEffect, useState } from "react"
 import { icons, projects, sections } from "./constants"
 import profile from './assets/perfil.png'
@@ -168,6 +168,22 @@ const Portfolio = () => {
             </div>
           </div>
         </section>
+        <section id="about" className="py-16 px-6" aria-labelledby="about-heading">
+          <div className="max-w-4xl mx-auto animate-on-scroll">
+            <div className="flex items-center justify-center gap-5 mb-8">
+              <UserRound size={50} color="white" aria-hidden="true" />
+              <h2 id="about-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Sobre mí</h2>
+            </div>
+            <div className="bg-gray-900/50 p-6 md:p-8 rounded-lg neon-border">
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Soy Full Stack Developer especializado en el desarrollo de soluciones e-commerce con React, Node.js y VTEX. Durante mi experiencia profesional participé en la evolución de tiendas para marcas como Carrefour y BGH, desarrollando nuevas funcionalidades y reworks para distintas áreas de la experiencia de compra.
+              </p>
+              <p className="mt-4 text-gray-300 text-lg leading-relaxed">
+                Me desempeño en equipos ágiles de 4 a 5 desarrolladores, participando en el análisis técnico de requerimientos, la estimación de tareas, el desarrollo y los code reviews. Mi trabajo se enfoca principalmente en frontend, y desarrollo soluciones backend cuando la complejidad de una funcionalidad lo requiere.
+              </p>
+            </div>
+          </div>
+        </section>
         <section id="experience" className="py-16 px-6" aria-labelledby="experience-heading">
           <div className="max-w-6xl mx-auto animate-on-scroll">
             <div className="flex items-center w-full  mb-12 gap-5 justify-center">
@@ -190,9 +206,9 @@ const Portfolio = () => {
                       <h4 className="text-lg font-semibold mb-3 text-white">Valtech</h4>
                       <ul className="text-gray-300 space-y-2 text-md">
                         <li>Desarrollé y mantuve soluciones e-commerce sobre VTEX para Más Online, BGH, BGH Tecno y Carrefour, participando en todo el ciclo de desarrollo.</li>
-                        <li>Desarrollé desde cero la tienda de celulares de BGH Tecno, trabajando en home, catálogo, PDP, carrito y checkout, además de la maquetación de integraciones y promociones de VTEX.</li>
-                        <li>Implementé nuevas funcionalidades para Carrefour, como calificaciones y reseñas de productos, rework de la landing y nuevas secciones de contenido.</li>
-                        <li>Construí soluciones backend con Node.js para guardar comentarios y reseñas, consultar promociones e insertar contenidos publicitarios.</li>
+                        <li>Desarrollé desde cero la tienda de celulares de BGH Tecno, cubriendo home, catálogo, PDP, carrito, checkout e integraciones de VTEX.</li>
+                        <li>Implementé para Carrefour calificaciones y reseñas de productos, rework de la landing y nuevas secciones de contenido.</li>
+                        <li>Construí soluciones con Node.js y GraphQL para comentarios, promociones, publicidad y optimización de la carga inicial.</li>
                         <li>Integré VTEX Master Data mediante consultas GraphQL y trabajé en la optimización de la carga inicial para mejorar el rendimiento de las tiendas.</li>
                         <li>En equipos de 4 a 5 desarrolladores, realicé análisis técnicos, estimaciones de tareas, desarrollo y code reviews durante cada sprint.</li>
                       </ul>
@@ -261,7 +277,7 @@ const Portfolio = () => {
               {projects.map((project, index) => (
                 <div
                   key={index}
-                  className="bg-gray-900/50 rounded-lg overflow-hidden neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105 animate-on-scroll"
+                  className={`bg-gray-900/50 rounded-lg overflow-hidden neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105 animate-on-scroll ${"featured" in project && project.featured ? "project-featured" : ""}`}
                   style={{ animationDelay: `${index * 200}ms` }}
                   role="listitem"
                 >
@@ -290,7 +306,20 @@ const Portfolio = () => {
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-3 text-emerald-400">{project.title}</h3>
+                    {"caseStudy" in project && project.caseStudy && (
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-emerald-300">Caso de estudio profesional</p>
+                    )}
                     <p className="text-gray-300 mb-4 leading-relaxed">{project.description}</p>
+                    {"details" in project && (
+                      <div className="mb-4">
+                        <h4 className="mb-2 text-sm font-semibold text-white">Alcance y contribuciones</h4>
+                        <ul className="space-y-2 text-sm text-gray-400">
+                        {project.details.map((detail) => (
+                          <li key={detail} className="list-disc pl-1 ml-4">{detail}</li>
+                        ))}
+                        </ul>
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label={`Tecnologías usadas en ${project.title}`}>
                       {project.tech.map((tech) => (
                         <span
