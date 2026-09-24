@@ -38,6 +38,16 @@ export const sections = [
     { name: "MongoDB / MySQL", icon: database, group: "Proyectos y formación" },
   ]
 
+export const englishSections = [
+  { id: "hero", label: "Home" },
+  { id: "about", label: "About me" },
+  { id: "experience", label: "Experience" },
+  { id: "education", label: "Education" },
+  { id: "projects", label: "Projects" },
+  { id: "stack", label: "Tech stack" },
+  { id: "contact", label: "Contact" },
+]
+
   export const projects = [
     {
       title: "Plataformas e-commerce",
@@ -81,3 +91,31 @@ export const sections = [
       link: "https://snippets-share.vercel.app/"
     },
   ]
+
+export const englishProjects = [
+  {
+    ...projects[0],
+    title: "E-commerce platforms",
+    description: "Ongoing professional work evolving e-commerce stores for Carrefour, Tokin, BGH, BGH Tecno, and Petba. I contributed new features and redesigns across different areas of the stores, focusing mainly on frontend work in private repositories.",
+    details: [
+      "Developed the comments and reviews section, including creating tables and entities in VTEX Master Data and managing them through My Account.",
+      "Implemented third-party purchase authorization and built custom apps for banners and promotional content.",
+      "Updated and customized sliders, landing pages, and other store sections to meet each client's requirements.",
+      "Solved complex features with Node.js backend solutions when they required multiple connections or calls; around 80% of implementations were handled on the frontend.",
+      "Features were deployed directly to production across each store's homepage and other areas, following VTEX architecture and capabilities."
+    ]
+  },
+  {
+    ...projects[1],
+    description: "A web app for searching Unsplash images, saving them, and organizing them into custom collections. It integrates an external API and includes global state management, data persistence, and a responsive interface."
+  },
+  {
+    ...projects[2],
+    title: "Management dashboard",
+    description: "A private dashboard built for a metalworking business to centralize accounting entries, income, and expenses. It also automates quote creation to streamline administrative work."
+  },
+  {
+    ...projects[3],
+    description: "A platform for saving, organizing, and sharing code snippets in multiple programming languages. It centralizes reusable resources in a simple, responsive interface."
+  }
+]

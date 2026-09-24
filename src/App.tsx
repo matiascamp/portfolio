@@ -1,18 +1,29 @@
 import { Github, Linkedin, Mail, ExternalLink, Terminal, BriefcaseBusiness, FolderCode, MessagesSquare, UserRound } from "lucide-react"
 import { useEffect, useState } from "react"
-import { icons, projects, sections } from "./constants"
+import { icons, projects, englishProjects, sections, englishSections } from "./constants"
 import profile from './assets/perfil.png'
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState("hero")
+  const [language, setLanguage] = useState<"es" | "en">(() =>
+    window.localStorage.getItem("portfolio-language") === "en" ? "en" : "es"
+  )
+  const isEnglish = language === "en"
+  const translatedSections = isEnglish ? englishSections : sections
+  const translatedProjects = isEnglish ? englishProjects : projects
 
   useEffect(() => {
-    document.title = "Matias Campodonico - Full Stack Developer | React, Node.js, VTEX"
+    document.documentElement.lang = language
+    document.title = isEnglish
+      ? "Matias Campodonico - Full Stack Developer | React, Node.js, VTEX"
+      : "Matias Campodonico - Full Stack Developer | React, Node.js, VTEX"
 
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content',
-        'Full Stack Developer especializado en e-commerce con React, Node.js, VTEX y GraphQL. Experiencia desarrollando tiendas, funcionalidades comerciales y soluciones orientadas a performance.'
+        isEnglish
+          ? 'Full Stack Developer specializing in e-commerce with React, Node.js, VTEX, and GraphQL. Experienced in building online stores, business features, and performance-focused solutions.'
+          : 'Full Stack Developer especializado en e-commerce con React, Node.js, VTEX y GraphQL. Experiencia desarrollando tiendas, funcionalidades comerciales y soluciones orientadas a performance.'
       )
     }
 
@@ -46,7 +57,11 @@ const Portfolio = () => {
     return () => {
       document.head.removeChild(script)
     }
-  }, [])
+  }, [language, isEnglish])
+
+  useEffect(() => {
+    window.localStorage.setItem("portfolio-language", language)
+  }, [language])
 
   useEffect(() => {
     const observerOptions = {
@@ -73,7 +88,7 @@ const Portfolio = () => {
       if (visibleSections[0]) setActiveSection(visibleSections[0].target.id)
     }, { threshold: [0.2, 0.4, 0.6], rootMargin: "-20% 0px -20% 0px" })
 
-    sections.forEach(({ id }) => {
+    translatedSections.forEach(({ id }) => {
       const section = document.getElementById(id)
       if (section) sectionObserver.observe(section)
     })
@@ -82,7 +97,7 @@ const Portfolio = () => {
       observer.disconnect()
       sectionObserver.disconnect()
     }
-  }, [])
+  }, [translatedSections])
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -95,17 +110,18 @@ const Portfolio = () => {
   return (
 
     <div className="min-h-screen bg-background dark">
-      <a href="#hero" className="skip-link">Saltar al contenido</a>
+      <a href="#hero" className="skip-link">{isEnglish ? "Skip to content" : "Saltar al contenido"}</a>
       <nav className="fixed top-0 h-full w-60 z-2 bg-background/95 backdrop-blur-md"
-        aria-label="Navegación principal"
+        aria-label={isEnglish ? "Main navigation" : "Navegación principal"}
         id="main-navigation"
+        lang={language}
       >
-        <div className="flex flex-col h-full p-6">
-          <div className="flex-1">
+          <div className="flex flex-col h-full p-6">
+            <div className="flex-1">
             <ul className="relative h-full w-full flex flex-col justify-evenly items-center ">
               <li aria-hidden="true" className="absolute left-0 border-l-1 border-green-600 h-full list-none" />
               {
-                sections.map((section) => (
+                translatedSections.map((section) => (
                   <li key={section.id} className="flex items-center justify-center w-full">
                     <div className={`bg-green-300 rounded-full p-2 absolute -left-2  ${activeSection === section.id ? "bg-primary/100  border border-primary/100" : "bg-primary/50 hover:bg-card/50 hover:neon-text"}`} />
                     <button onClick={() => scrollToSection(section.id)}
@@ -118,6 +134,15 @@ const Portfolio = () => {
                 ))}
             </ul>
           </div>
+          <button
+            type="button"
+            onClick={() => setLanguage(isEnglish ? "es" : "en")}
+            className="mt-5 self-center rounded-full border border-emerald-500/50 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-500/20"
+            aria-label={isEnglish ? "Switch language to Spanish" : "Cambiar idioma a inglés"}
+            aria-pressed={isEnglish}
+          >
+            {isEnglish ? "ES · Español" : "EN · English"}
+          </button>
         </div>
       </nav>
       <div className="min-h-screen md:ml-64">
@@ -127,12 +152,12 @@ const Portfolio = () => {
             <div className="flex items-center justify-center gap-10 py-5">
               <img src={profile}
                 className="w-25 h-30 rounded-full"
-                alt="Foto de perfil de Matias Campodonico, Full Stack Developer"
+                alt={isEnglish ? "Profile photo of Matias Campodonico, Full Stack Developer" : "Foto de perfil de Matias Campodonico, Full Stack Developer"}
                 width="80"
                 height="80"
                 loading="eager"
               />
-              <p className="neon-border rounded-2xl p-2 border text-white  transition-all duration-400 transform hover:scale-105 text-xl">Disponible para trabajar · Remoto</p>
+              <p className="neon-border rounded-2xl p-2 border text-white  transition-all duration-400 transform hover:scale-105 text-xl">{isEnglish ? "Available for remote work" : "Disponible para trabajar · Remoto"}</p>
             </div>
             <header>
               <h1 id="hero-heading" className="text-4xl sm:text-6xl font-bold text-foreground mb-6 stagger-child transition-all duration-800">
@@ -143,21 +168,21 @@ const Portfolio = () => {
               </h1>
             </header>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed stagger-child transition-all duration-800 ease-out">
-              Full Stack Developer especializado en soluciones e-commerce con React, Node.js y VTEX. Experiencia desarrollando tiendas para marcas como Carrefour y BGH, creando funcionalidades desde cero y optimizando la performance y la experiencia de compra.
+              {isEnglish ? "Full Stack Developer specializing in e-commerce solutions with React, Node.js, and VTEX. Experienced in building online stores for brands such as Carrefour and BGH, creating features from scratch, and improving performance and the shopping experience." : "Full Stack Developer especializado en soluciones e-commerce con React, Node.js y VTEX. Experiencia desarrollando tiendas para marcas como Carrefour y BGH, creando funcionalidades desde cero y optimizando la performance y la experiencia de compra."}
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground" aria-label="Información profesional">
               <span>Buenos Aires, Argentina</span>
               <span aria-hidden="true">•</span>
-              <span>Inglés B1</span>
+              <span>{isEnglish ? "English B1" : "Inglés B1"}</span>
               <span aria-hidden="true">•</span>
-              <span>Buscando oportunidades Full Stack, Frontend o Backend</span>
+              <span>{isEnglish ? "Open to Full Stack, Frontend, or Backend opportunities" : "Buscando oportunidades Full Stack, Frontend o Backend"}</span>
             </div>
             <div className="py-10 flex items-center justify-center gap-5">
               <a
                 className="neon-border rounded-2xl py-2 px-4 border text-white  transition-all duration-400 transform hover:scale-105"
                 href="mailto:campodonicomatias@outlook.com"
                 aria-label="Enviar email a Matias Campodonico"
-              >Contactame</a>
+              >{isEnglish ? "Contact me" : "Contactame"}</a>
               <a
                 className="neon-border rounded-2xl py-2 px-4 border text-white  transition-all duration-400 transform hover:scale-105"
                 target="_blank"
@@ -172,14 +197,14 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto animate-on-scroll">
             <div className="flex items-center justify-center gap-5 mb-8">
               <UserRound size={50} color="white" aria-hidden="true" />
-              <h2 id="about-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Sobre mí</h2>
+              <h2 id="about-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">{isEnglish ? "About me" : "Sobre mí"}</h2>
             </div>
             <div className="bg-gray-900/50 p-6 md:p-8 rounded-lg neon-border">
               <p className="text-gray-300 text-lg leading-relaxed">
-                Soy Full Stack Developer especializado en el desarrollo de soluciones e-commerce con React, Node.js y VTEX. Durante mi experiencia profesional participé en la evolución de tiendas para marcas como Carrefour y BGH, desarrollando nuevas funcionalidades y reworks para distintas áreas de la experiencia de compra.
+                {isEnglish ? "I'm a Full Stack Developer specializing in e-commerce solutions with React, Node.js, and VTEX. In my professional experience, I've helped evolve online stores for brands such as Carrefour and BGH, building new features and redesigns across different parts of the shopping experience." : "Soy Full Stack Developer especializado en el desarrollo de soluciones e-commerce con React, Node.js y VTEX. Durante mi experiencia profesional participé en la evolución de tiendas para marcas como Carrefour y BGH, desarrollando nuevas funcionalidades y reworks para distintas áreas de la experiencia de compra."}
               </p>
               <p className="mt-4 text-gray-300 text-lg leading-relaxed">
-                Me desempeño en equipos ágiles de 4 a 5 desarrolladores, participando en el análisis técnico de requerimientos, la estimación de tareas, el desarrollo y los code reviews. Mi trabajo se enfoca principalmente en frontend, y desarrollo soluciones backend cuando la complejidad de una funcionalidad lo requiere.
+                {isEnglish ? "I work in agile teams of 4–5 developers, contributing to technical requirements analysis, task estimation, development, and code reviews. My work focuses mainly on frontend, and I build backend solutions when a feature's complexity calls for it." : "Me desempeño en equipos ágiles de 4 a 5 desarrolladores, participando en el análisis técnico de requerimientos, la estimación de tareas, el desarrollo y los code reviews. Mi trabajo se enfoca principalmente en frontend, y desarrollo soluciones backend cuando la complejidad de una funcionalidad lo requiere."}
               </p>
             </div>
           </div>
@@ -188,7 +213,7 @@ const Portfolio = () => {
           <div className="max-w-6xl mx-auto animate-on-scroll">
             <div className="flex items-center w-full  mb-12 gap-5 justify-center">
               <BriefcaseBusiness size={50} color="white" aria-hidden="true" />
-              <h2 id="experience-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Experiencia laboral</h2>
+              <h2 id="experience-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">{isEnglish ? "Work experience" : "Experiencia laboral"}</h2>
             </div>
             <div className="relative">
               <div className="absolute left-8 md:left-1/2 transform md:-translate-x-px h-full w-0.5 bg-gradient-to-b from-emerald-500 via-emerald-400 to-emerald-500 neon-glow"></div>
@@ -200,17 +225,17 @@ const Portfolio = () => {
                       <header className="flex items-center justify-between mb-4">
                         <h3 className="text-xl font-semibold text-emerald-400">Full Stack Developer</h3>
                         <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">
-                          Octubre 2021 - Octubre 2024
+                          {isEnglish ? "October 2021 - October 2024" : "Octubre 2021 - Octubre 2024"}
                         </time>
                       </header>
                       <h4 className="text-lg font-semibold mb-3 text-white">Valtech</h4>
                       <ul className="text-gray-300 space-y-2 text-md">
-                        <li>Desarrollé y mantuve soluciones e-commerce sobre VTEX para Más Online, BGH, BGH Tecno y Carrefour, participando en todo el ciclo de desarrollo.</li>
-                        <li>Desarrollé desde cero la tienda de celulares de BGH Tecno, cubriendo home, catálogo, PDP, carrito, checkout e integraciones de VTEX.</li>
-                        <li>Implementé para Carrefour calificaciones y reseñas de productos, rework de la landing y nuevas secciones de contenido.</li>
-                        <li>Construí soluciones con Node.js y GraphQL para comentarios, promociones, publicidad y optimización de la carga inicial.</li>
-                        <li>Integré VTEX Master Data mediante consultas GraphQL y trabajé en la optimización de la carga inicial para mejorar el rendimiento de las tiendas.</li>
-                        <li>En equipos de 4 a 5 desarrolladores, realicé análisis técnicos, estimaciones de tareas, desarrollo y code reviews durante cada sprint.</li>
+                        <li>{isEnglish ? "Developed and maintained VTEX e-commerce solutions for Más Online, BGH, BGH Tecno, and Carrefour, contributing throughout the development lifecycle." : "Desarrollé y mantuve soluciones e-commerce sobre VTEX para Más Online, BGH, BGH Tecno y Carrefour, participando en todo el ciclo de desarrollo."}</li>
+                        <li>{isEnglish ? "Built BGH Tecno's mobile phone store from scratch, covering the homepage, catalog, PDP, cart, checkout, and VTEX integrations." : "Desarrollé desde cero la tienda de celulares de BGH Tecno, cubriendo home, catálogo, PDP, carrito, checkout e integraciones de VTEX."}</li>
+                        <li>{isEnglish ? "Implemented product ratings and reviews, a landing page redesign, and new content sections for Carrefour." : "Implementé para Carrefour calificaciones y reseñas de productos, rework de la landing y nuevas secciones de contenido."}</li>
+                        <li>{isEnglish ? "Built Node.js and GraphQL solutions for comments, promotions, advertising, and faster initial page loads." : "Construí soluciones con Node.js y GraphQL para comentarios, promociones, publicidad y optimización de la carga inicial."}</li>
+                        <li>{isEnglish ? "Integrated VTEX Master Data through GraphQL queries and optimized initial page loading to improve store performance." : "Integré VTEX Master Data mediante consultas GraphQL y trabajé en la optimización de la carga inicial para mejorar el rendimiento de las tiendas."}</li>
+                        <li>{isEnglish ? "Worked in teams of 4–5 developers on technical analysis, task estimates, development, and code reviews each sprint." : "En equipos de 4 a 5 desarrolladores, realicé análisis técnicos, estimaciones de tareas, desarrollo y code reviews durante cada sprint."}</li>
                       </ul>
                       <div className="flex flex-wrap gap-2 mt-4">
                         {["React", "Node.js", "VTEX IO", "TypeScript", "GraphQL", "jQuery", "CSS"].map((tech) => (
@@ -234,21 +259,21 @@ const Portfolio = () => {
           <div className="max-w-6xl mx-auto animate-on-scroll">
             <div className="flex items-center w-full mb-12 gap-5 justify-center">
               <Terminal size={50} color="white" aria-hidden="true" />
-              <h2 id="education-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Formación</h2>
+              <h2 id="education-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">{isEnglish ? "Education" : "Formación"}</h2>
             </div>
             <div className="max-w-3xl mx-auto">
               <article className="relative flex items-center">
                 <div className="w-full">
                   <div className="bg-gray-900/50 p-6 rounded-lg neon-border hover:neon-glow transition-all duration-300">
                     <header className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-semibold text-emerald-400">Bootcamp Full Stack Developer</h3>
+                      <h3 className="text-xl font-semibold text-emerald-400">{isEnglish ? "Full Stack Developer Bootcamp" : "Bootcamp Full Stack Developer"}</h3>
                       <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">2021</time>
                     </header>
                     <h4 className="text-lg font-semibold mb-3 text-white">Academia Henry</h4>
                     <ul className="text-gray-300 space-y-2 text-md">
-                      <li>Formación intensiva de más de 800 horas en desarrollo full stack.</li>
-                      <li>Desarrollo de proyectos con React, Node.js, bases de datos y Git.</li>
-                      <li>Práctica de metodologías ágiles y dinámicas de desarrollo colaborativo.</li>
+                      <li>{isEnglish ? "An intensive program with over 800 hours of full stack development training." : "Formación intensiva de más de 800 horas en desarrollo full stack."}</li>
+                      <li>{isEnglish ? "Built projects with React, Node.js, databases, and Git." : "Desarrollo de proyectos con React, Node.js, bases de datos y Git."}</li>
+                      <li>{isEnglish ? "Practiced agile methods and collaborative development workflows." : "Práctica de metodologías ágiles y dinámicas de desarrollo colaborativo."}</li>
                     </ul>
                     <div className="flex flex-wrap gap-2 mt-4">
                       {["React", "Node.js", "PostgreSQL", "JavaScript", "Git"].map((tech) => (
@@ -271,10 +296,10 @@ const Portfolio = () => {
           <div className="max-w-6xl mx-auto animate-on-scroll">
             <div className="flex items-center justify-center w-full gap-5  mb-12">
               <FolderCode size={50} color="white" aria-hidden="true" />
-              <h2 id="projects-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">Proyectos</h2>
+              <h2 id="projects-heading" className="text-4xl md:text-5xl font-bold text-center neon-text text-white">{isEnglish ? "Projects" : "Proyectos"}</h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" role="list">
-              {projects.map((project, index) => (
+              {translatedProjects.map((project, index) => (
                 <div
                   key={index}
                   className={`bg-gray-900/50 rounded-lg overflow-hidden neon-border hover:neon-glow transition-all duration-300 transform hover:scale-105 animate-on-scroll ${"featured" in project && project.featured ? "project-featured" : ""}`}
@@ -287,7 +312,7 @@ const Portfolio = () => {
                         <img
                           key={index}
                           src={image}
-                          alt={`Screenshot ${index + 1} del proyecto ${project.title}`}
+                          alt={isEnglish ? `Screenshot ${index + 1} of ${project.title}` : `Screenshot ${index + 1} del proyecto ${project.title}`}
                           className="h-full object-cover w-auto"
                           width="320"
                           height="192"
@@ -296,7 +321,7 @@ const Portfolio = () => {
                       )) :
                       <img
                         src={project.image}
-                        alt={`Screenshot del proyecto ${project.title}`}
+                        alt={isEnglish ? `Screenshot of ${project.title}` : `Screenshot del proyecto ${project.title}`}
                         className="w-full h-full object-cover opacity-80"
                         width="480"
                         height="192"
@@ -307,12 +332,12 @@ const Portfolio = () => {
                   <div className="p-6">
                     <h3 className="text-xl font-semibold mb-3 text-emerald-400">{project.title}</h3>
                     {"caseStudy" in project && project.caseStudy && (
-                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-emerald-300">Caso de estudio profesional</p>
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-emerald-300">{isEnglish ? "Professional case study" : "Caso de estudio profesional"}</p>
                     )}
                     <p className="text-gray-300 mb-4 leading-relaxed">{project.description}</p>
-                    {"details" in project && (
+                    {"details" in project && project.details && (
                       <div className="mb-4">
-                        <h4 className="mb-2 text-sm font-semibold text-white">Alcance y contribuciones</h4>
+                        <h4 className="mb-2 text-sm font-semibold text-white">{isEnglish ? "Scope and contributions" : "Alcance y contribuciones"}</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
                         {project.details.map((detail) => (
                           <li key={detail} className="list-disc pl-1 ml-4">{detail}</li>
@@ -320,7 +345,7 @@ const Portfolio = () => {
                         </ul>
                       </div>
                     )}
-                    <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label={`Tecnologías usadas en ${project.title}`}>
+                    <div className="flex flex-wrap gap-2 mb-4" role="list" aria-label={isEnglish ? `Technologies used in ${project.title}` : `Tecnologías usadas en ${project.title}`}>
                       {project.tech.map((tech) => (
                         <span
                           key={tech}
@@ -337,9 +362,9 @@ const Portfolio = () => {
                         href={project.link}
                         className="flex items-center text-emerald-400 hover:text-emerald-300 transition-colors duration-300 cursor-pointer"
                         rel="noopener noreferrer"
-                        aria-label={`Ver demo del proyecto ${project.title} (se abre en nueva pestaña)`}
+                        aria-label={isEnglish ? `View ${project.title} demo (opens in a new tab)` : `Ver demo del proyecto ${project.title} (se abre en nueva pestaña)`}
                       >
-                        <span className="mr-2">Ver demo</span>
+                        <span className="mr-2">{isEnglish ? "View project" : "Ver demo"}</span>
                         <ExternalLink className="w-4 h-4" aria-hidden="true" />
                       </a>
                     }
@@ -383,7 +408,7 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto text-center animate-on-scroll">
             <div className="flex items-center w-full justify-center gap-5 mb-8 ">
               <MessagesSquare size={50} color="white" aria-hidden="true" />
-              <h2 id="contact-heading" className="text-4xl md:text-5xl font-bold neon-text text-white">Contacto</h2>
+              <h2 id="contact-heading" className="text-4xl md:text-5xl font-bold neon-text text-white">{isEnglish ? "Contact" : "Contacto"}</h2>
             </div>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <a
@@ -406,7 +431,7 @@ const Portfolio = () => {
               >
                 <Linkedin className="w-8 h-8 text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold mb-2 text-white">LinkedIn</h3>
-                <p className="text-gray-300">Perfil</p>
+                <p className="text-gray-300">{isEnglish ? "Profile" : "Perfil"}</p>
               </a>
 
               <a
@@ -418,7 +443,7 @@ const Portfolio = () => {
               >
                 <Github className="w-8 h-8 text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                 <h3 className="text-lg font-semibold mb-2 text-white">GitHub</h3>
-                <p className="text-gray-300">Perfil</p>
+                <p className="text-gray-300">{isEnglish ? "Profile" : "Perfil"}</p>
               </a>
             </div>
           </div>
