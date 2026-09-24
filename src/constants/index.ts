@@ -28,43 +28,46 @@ export const sections = [
     { name: "Node.js", icon: node },
     { name: "TypeScript", icon: typescript },
     { name: "Next.js", icon: next },
+    { name: "VTEX IO", icon: global },
+    { name: "VTEX Master Data", icon: database },
     { name: "GraphQL", icon: graphql },
+    { name: "jQuery", icon: global },
     { name: "Tailwind", icon: tailwind },
-    { name: "Zustand/Redux", icon: global },
-    { name: "MongoDb,mySQL", icon: database },
+    { name: "Zustand / Redux", icon: global },
+    { name: "MongoDB / MySQL", icon: database },
   ]
 
   export const projects = [
     {
-      title: "Plataformas e-commerce  (carrefour,tokin,bgh,tecno,petba)",
+      title: "Plataformas e-commerce",
       description:
-        "Aplicación de soluciones mediante VTEX IO,agregado de nuevas funcionalidades mediante custom apps y refactor de diseño.(Repositorios privados)",
+        "Participación en el desarrollo de tiendas para Carrefour, Tokin, BGH, BGH Tecno y Petba. Implementé nuevas funcionalidades de e-commerce, custom apps, integraciones con GraphQL, mejoras de checkout y refactors de diseño en VTEX IO. Proyecto profesional con repositorios privados.",
       image: [carrefour,bgh,tecno,tokin],
-      tech: ["React", "Node.js", "VTEX IO", "Graphql"],
+      tech: ["React", "Node.js", "VTEX IO", "GraphQL"],
       link: ""
     },
     {
-      title: "Unsplash images collections",
+      title: "Unsplash Image Collections",
       description:
-        "Buscador de imagenes y manejo de colecciones con la  API unsplash images",
+        "Aplicación web para buscar imágenes en Unsplash, guardarlas y organizarlas en colecciones personalizadas. Incluye consumo de API externa, manejo de estado global, persistencia de datos y una interfaz responsive.",
       image: unsplash,
-      tech: ["TypeScript", "Next js", "Tailwind", "Zustand","MongoDB","Vitest"],
+      tech: ["TypeScript", "Next.js", "Tailwind", "Zustand", "MongoDB", "Vitest"],
       link: "https://unsplash-collections-iota.vercel.app/"
     },
     {
-      title: "Dashboard para sistema de gestión (App privada)",
+      title: "Dashboard de gestión",
       description:
-        "Sistema de gestión diseñado especificamente para una herreria con manejo de asientos contables,gastos/ingresos y aumatizacion para creacion de presupuestos",
+        "Dashboard privado desarrollado para una herrería, orientado a centralizar la gestión de asientos contables, ingresos y gastos. También automatiza la creación de presupuestos para agilizar las tareas administrativas del negocio.",
       image: dashboard,
-      tech: ["Next js", "Prisma", "MySQL", "Tailwind","jws"],
+      tech: ["Next.js", "Prisma", "MySQL", "Tailwind", "JWT"],
       link: ""
     },
     {
-      title: "Snippets share",
+      title: "Snippets Share",
       description:
-        "App para guardar y compartir piezas de codigo en diferente lenguajes",
+        "Plataforma para guardar, organizar y compartir fragmentos de código en distintos lenguajes de programación. Permite centralizar recursos reutilizables y acceder a ellos desde una interfaz simple y responsive.",
       image: snippets,
-      tech: ["Next js", "Tailwind", "Zustand", "Neon db serverless"],
+      tech: ["Next.js", "Tailwind", "Zustand", "Neon Serverless Postgres"],
       link: "https://snippets-share.vercel.app/"
     },
   ]

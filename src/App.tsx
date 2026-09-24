@@ -12,7 +12,7 @@ const Portfolio = () => {
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
       metaDescription.setAttribute('content',
-        'Full Stack Developer especializado en React, Node.js y VTEX IO. +3 años de experiencia desarrollando aplicaciones web escalables y optimizadas para e-commerce.'
+        'Full Stack Developer especializado en e-commerce con React, Node.js, VTEX y GraphQL. Experiencia desarrollando tiendas, funcionalidades comerciales y soluciones orientadas a performance.'
       )
     }
 
@@ -21,17 +21,13 @@ const Portfolio = () => {
       "@type": "Person",
       "name": "Matias Campodonico",
       "jobTitle": "Full Stack Web Developer",
-      "description": "Full Stack Developer especializado en aplicaciones web dinámicas, optimizaciones de código y aumentos de performance",
+      "description": "Full Stack Developer especializado en soluciones e-commerce con React, Node.js, VTEX y GraphQL.",
       "url": window.location.href,
       "image": profile,
       "sameAs": [
         "https://linkedin.com/in/matias-campodonico",
         "https://github.com/matiascamp"
       ],
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Valtech"
-      },
       "knowsAbout": [
         "React", "Node.js", "JavaScript", "TypeScript", "VTEX IO", "GraphQL",
         "CSS", "HTML", "PostgreSQL", "Git", "Full Stack Development"
@@ -136,7 +132,7 @@ const Portfolio = () => {
                 height="80"
                 loading="eager"
               />
-              <p className="neon-border rounded-2xl p-2 border text-white  transition-all duration-400 transform hover:scale-105 text-xl">Disponible para trabajar</p>
+              <p className="neon-border rounded-2xl p-2 border text-white  transition-all duration-400 transform hover:scale-105 text-xl">Disponible para trabajar · Remoto</p>
             </div>
             <header>
               <h1 id="hero-heading" className="text-4xl sm:text-6xl font-bold text-foreground mb-6 stagger-child transition-all duration-800">
@@ -149,6 +145,13 @@ const Portfolio = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed stagger-child transition-all duration-800 ease-out">
               Full Stack Developer especializado en soluciones e-commerce con React, Node.js y VTEX. Experiencia desarrollando tiendas para marcas como Carrefour y BGH, creando funcionalidades desde cero y optimizando la performance y la experiencia de compra.
             </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground" aria-label="Información profesional">
+              <span>Buenos Aires, Argentina</span>
+              <span aria-hidden="true">•</span>
+              <span>Inglés B1</span>
+              <span aria-hidden="true">•</span>
+              <span>Buscando oportunidades Full Stack, Frontend o Backend</span>
+            </div>
             <div className="py-10 flex items-center justify-center gap-5">
               <a
                 className="neon-border rounded-2xl py-2 px-4 border text-white  transition-all duration-400 transform hover:scale-105"
@@ -181,7 +184,7 @@ const Portfolio = () => {
                       <header className="flex items-center justify-between mb-4">
                         <h3 className="text-xl font-semibold text-emerald-400">Full Stack Developer</h3>
                         <time className="text-sm text-gray-400 bg-emerald-500/20 px-3 py-1 rounded-full">
-                          2021 - 2024
+                          Octubre 2021 - Octubre 2024
                         </time>
                       </header>
                       <h4 className="text-lg font-semibold mb-3 text-white">Valtech</h4>
@@ -324,8 +327,7 @@ const Portfolio = () => {
               <h2 id="stack-heading" className="text-4xl md:text-5xl font-bold text-center  text-white neon-text">Stack</h2>
             </div>
             <div className="flex flex-wrap lg:justify-start justify-center w-full gap-6" role="list">
-              {icons.map((tech, index) =>
-              (
+              {icons.map((tech, index) => (
                 <div
                   key={tech.name}
                   className="flex flex-col items-center max-w-30 py-6 px-7 bg-gray-900/50 rounded-lg neon-border hover:neon-glow transition-all duration-300 transform hover:scale-110 animate-on-scroll"
@@ -340,13 +342,11 @@ const Portfolio = () => {
                       width="40"
                       height="40"
                       loading="lazy"
-
                     />
                   </div>
                   <span className="text-sm font-medium text-center text-white">{tech.name}</span>
                 </div>
-              )
-              )}
+              ))}
             </div>
           </div>
         </section>
